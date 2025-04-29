@@ -1,53 +1,64 @@
-# ml-design-doc
-
-A template for design docs for machine learning systems based on this [post](https://eugeneyan.com/writing/ml-design-docs/).
-
-Note: This template is a guideline / checklist and is **not meant to be exhaustive**. The intent of the design doc is to help you think better (about the problem and design) and get feedback. Adopt whichever sections—and add new sections—to meet this goal. View other templates, examples [here](#other-templates-examples-etc).
+# ml-design-doc: Support Request Categorization
 
 ---
 ## 1. Overview
 
-A summary of the doc's purpose, problem, solution, and desired outcome, usually in 3-5 sentences.
+The purpose of this design document is to outline the development of a machine learning-based solution for classifying customer support requests. The goal is to route tickets to the appropriate team accurately and adapt to new categories or types of queries. The solution will involve a pipeline for data ingestion, model training, evaluation, and retraining. Initially, model is going to be trained on support query datasets from HuggingFace, but I may run the finished version on real data from Jira Service Management support project I am running. 
 
 ## 2. Motivation
-Why the problem is important to solve, and why now.
+Automated routing and categorization of customer requests greatly improves operational efficiency (helps meet acceptance and first response SLAs), reduces costs (reduces the number of L1 support agents required) and in general makes day-to-day of support team easier since nobody likes to be on monitoring duty. 
 
 ## 3. Success metrics
-Usually framed as business goals, such as increased customer engagement (e.g., CTR, DAU), revenue, or reduced cost.
+- Increased accuracy in query classification.
+- Reduced manual intervention in routing queries.
+- Decreased average response time for customer queries.
 
 ## 4. Requirements & Constraints
-Functional requirements are those that should be met to ship the project. They should be described in terms of the customer perspective and benefit. (See [this](https://eugeneyan.com/writing/ml-design-docs/#the-why-and-what-of-design-docs) for more details.)
+### Functional Requirements
+- The system should classify customer support queries with high accuracy. (definition of high is TBD)
+- The system should provide regular reports on classification accuracy and performance.
 
-Non-functional/technical requirements are those that define system quality and how the system should be implemented. These include performance (throughput, latency, error rates), cost (infra cost, ops effort), security, data privacy, etc.
+### Non-Functional Requirements
+- The system should handle a high volume of queries with low latency.
+- It should comply with data privacy regulations such as GDPR.
+- Cost of operation should be as low as possible since I am out of free credits/trials on most Cloud Providers
 
-Constraints can come in the form of non-functional requirements (e.g., cost below $`x` a month, p99 latency < `y`ms)
+### Constraints
+- System should be additionally adapted for each separate ITSM solution, as they have different architectures, APIs and data policies. 
 
 ### 4.1 What's in-scope & out-of-scope?
-Some problems are too big to solve all at once. Be clear about what's out of scope.
+#### In scope
+- Classification of customer support requests.
+- Adaptation to new categories and query types.
+- Regular evaluation and retraining of the model.
 
+#### Out of scope
+- Automated request processing and customer communication
 ## 5. Methodology
 
 ### 5.1. Problem statement
 
-How will you frame the problem? For example, fraud detection can be framed as an unsupervised (outlier detection, graph cluster) or supervised problem (e.g., classification).
+The problem is framed as a supervised classification task where the goal is to assign each customer support query to the most appropriate department based on its content.
 
 ### 5.2. Data
 
-What data will you use to train your model? What input data is needed during serving?
+I have found a large number of interesting datasets on HuggingFace (and not much on Kaggle, surprisingly) that I am going to use as training data.
 
 ### 5.3. Techniques
 
-What machine learning techniques will you use? How will you clean and prepare the data (e.g., excluding outliers) and create features?
+- Data Preprocessing: Tokenization, stopword removal, and stemming/lemmatization.
+- Feature Engineering: TF-IDF, word embeddings, or contextual embeddings (maybe BERT?).
+- Model Selection: I am not entirely sure yet, but I will try to work with simple algorhytms first (Random Forests, XGBoost) and then implement Transformer-based architecture (Mistral Small 24B - https://huggingface.co/mistralai/Mistral-Small-24B-Instruct-2501)
 
 ### 5.4. Experimentation & Validation
 
-How will you validate your approach offline? What offline evaluation metrics will you use?
-
-If you're A/B testing, how will you assign treatment and control (e.g., customer vs. session-based) and what metrics will you measure? What are the success and [guardrail](https://medium.com/airbnb-engineering/designing-experimentation-guardrails-ed6a976ec669) metrics?
+- Offline Evaluation: Use metrics such as accuracy, precision, recall, and F1-score.
+- A/B Testing: Assign treatment and control groups based on customer sessions. Measure success metrics such as classification accuracy and customer satisfaction scores. Guardrail metrics include query volume and system latency.
 
 ### 5.5. Human-in-the-loop
 
-How will you incorporate human intervention into your ML system (e.g., product/customer exclusion lists)?
+- Incorporate a feedback loop where misclassified queries are reviewed by human agents.
+- Allow human agents to override model predictions and provide correct labels for retraining.
 
 ## 6. Implementation
 
@@ -92,41 +103,31 @@ Risks are the known unknowns; uncertainties are the unknown unknows. What worrie
 
 ### 7.1. Alternatives
 
-What alternatives did you consider and exclude? List pros and cons of each alternative and the rationale for your decision.
+#### Rule-based System
+- Pros: Simple to implement, no need for large datasets.
+- Cons: Limited adaptability to new query types, high maintenance.
+
+#### Unsupervised Learning
+- Pros: Can discover hidden patterns in data.
+- Cons: Less control over classification outcomes, harder to evaluate.
 
 ### 7.2. Experiment Results
 
-Share any results of offline experiments that you conducted.
+TBD
 
 ### 7.3. Performance benchmarks
 
-Share any performance benchmarks you ran (e.g., throughput vs. latency vs. instance size/count).
+TBD
 
 ### 7.4. Milestones & Timeline
 
-What are the key milestones for this system and the estimated timeline?
+TBD
 
 ### 7.5. Glossary
 
-Define and link to business or technical terms.
+TBD
 
 ### 7.6. References
 
-Add references that you might have consulted for your methodology.
+TBD
 
----
-## Other templates, examples, etc
-- [A Software Design Doc](https://www.industrialempathy.com/posts/design-doc-a-design-doc/) `Google`
-- [Design Docs at Google](https://www.industrialempathy.com/posts/design-docs-at-google/) `Google`
-- [Product Spec of Emoji Reactions on Twitter Messages](https://docs.google.com/document/d/1sUX-sm5qZ474PCQQUpvdi3lvvmWPluqHOyfXz3xKL2M/edit#heading=h.554u12gw2xpd) `Twitter`
-- [Design Docs, Markdown, and Git](https://caitiem.com/2020/03/29/design-docs-markdown-and-git/) `Microsoft`
-- [Technical Decision-Making and Alignment in a Remote Culture](https://multithreaded.stitchfix.com/blog/2020/12/07/remote-decision-making/) `Stitchfix`
-- [Design Documents for Chromium](https://www.chromium.org/developers/design-documents) `Chromium`
-- [PRD Template](https://works.hashicorp.com/articles/prd-template) and [RFC Template](https://works.hashicorp.com/articles/rfc-template) (example RFC: [Manager Charter](https://works.hashicorp.com/articles/manager-charter)) `HashiCorp`
-- [Pitch for To-Do Groups and Group Notifications](https://basecamp.com/shapeup/1.5-chapter-06#examples) `Basecamp`
-- [The Anatomy of a 6-pager](https://writingcooperative.com/the-anatomy-of-an-amazon-6-pager-fc79f31a41c9) and an [example](https://docs.google.com/document/d/1LPh1LWx1z67YFo67DENYUGBaoKk39dtX7rWAeQHXzhg/edit) `Amazon`
-- [Writing for Distributed Teams](http://veekaybee.github.io/2021/07/17/p2s/), [How P2 Changed Automattic](https://ma.tt/2009/05/how-p2-changed-automattic/) `Automattic`
-- [Writing Technical Design Docs](https://medium.com/machine-words/writing-technical-design-docs-71f446e42f2e), [Writing Technical Design Docs, Revisited](https://medium.com/machine-words/writing-technical-design-docs-revisited-850d36570ec) `AWS`
-- [How to write a good software design doc](https://www.freecodecamp.org/news/how-to-write-a-good-software-design-document-66fcf019569c/) `Plaid`
-
-Contributions [welcome](https://github.com/eugeneyan/ml-design-docs/pulls)!
