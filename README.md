@@ -64,40 +64,63 @@ I have found a large number of interesting datasets on HuggingFace (and not much
 
 ### 6.1. High-level design
 
-![](https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Data-flow-diagram-example.svg/1280px-Data-flow-diagram-example.svg.png)
+Data-flow diagram
 
-Start by providing a big-picture view. [System-context diagrams](https://en.wikipedia.org/wiki/System_context_diagram) and [data-flow diagrams](https://en.wikipedia.org/wiki/Data-flow_diagram) work well.
+![image](https://github.com/user-attachments/assets/cc9f3fe7-0f33-49fe-86d8-9cef43e556d1)
+
+
+- Data Ingestion: Collect and preprocess customer support queries.
+
+- Model Training: Train the classification model using historical data.
+
+- Model Serving: Deploy the model to classify real-time queries.
+
+- Evaluation: Regularly evaluate model performance and retrain as needed.
+
+- Monitoring: Log and monitor system performance and accuracy.
 
 ### 6.2. Infra
 
-How will you host your system? On-premise, cloud, or hybrid? This will define the rest of this section
+The system will be hosted on AWS, GCP or Azure to ensure reliability and ease of access.
 
 ### 6.3. Performance (Throughput, Latency)
 
-How will your system meet the throughput and latency requirements? Will it scale vertically or horizontally?
+The system will scale horizontally by adding more instances to handle increased query volume.
 
 ### 6.4. Security
 
-How will your system/application authenticate users and incoming requests? If it's publicly accessible, will it be behind a firewall?
+- Authenticate users and incoming requests using OAuth2.
+
+- Implement firewalls and encryption to protect data in transit and at rest.
 
 ### 6.5. Data privacy
 
-How will you ensure the privacy of customer data? Will your system be compliant with data retention and deletion policies (e.g., [GDPR](https://gdpr.eu/what-is-gdpr/))?
+- Ensure compliance with GDPR and other data protection regulations.
+
+- Implement data retention and deletion policies to protect customer data.
 
 ### 6.6. Monitoring & Alarms
 
-How will you log events in your system? What metrics will you monitor and how? Will you have alarms if a metric breaches a threshold or something else goes wrong?
+- Log events using a centralized logging system (e.g., ELK Stack).
+
+- Monitor key metrics such as query volume, latency, and classification accuracy.
+
+- Set up alarms for threshold breaches or system failures.
 
 ### 6.7. Cost
-How much will it cost to build and operate your system? Share estimated monthly costs (e.g., EC2 instances, Lambda, etc.)
+For purposes of this course project, I will try to keep everything free-tier
 
 ### 6.8. Integration points
 
-How will your system integrate with upstream data and downstream users?
+- Integrate with upstream data sources such as customer support databases.
+
+- Provide APIs for downstream users to access classification results.
 
 ### 6.9. Risks & Uncertainties
 
-Risks are the known unknowns; uncertainties are the unknown unknows. What worries you and you would like others to review?
+- Risks: Potential data quality issues, model drift over time, and scalability challenges.
+
+- Uncertainties: Unforeseen changes in query patterns or volume.
 
 ## 7. Appendix
 
